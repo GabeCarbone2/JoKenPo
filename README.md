@@ -41,38 +41,85 @@ Você venceu!
 ## Código-Fonte
 Aqui está a implementação principal do jogo em Dart:
 ```dart
-import 'dart:io';
+import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() {
-  List<String> opcoes = ['Pedra', 'Papel', 'Tesoura'];
-  Random random = Random();
+class Jogo extends StatefulWidget {
+  const Jogo({Key? key}) : super(key: key);
 
-  print('Escolha uma opção:');
-  print('1 - Pedra');
-  print('2 - Papel');
-  print('3 - Tesoura');
-  stdout.write('> ');
-  
-  int? escolhaUsuario = int.tryParse(stdin.readLineSync() ?? '');
-  if (escolhaUsuario == null || escolhaUsuario < 1 || escolhaUsuario > 3) {
-    print('Escolha inválida!');
-    return;
+  @override
+  State<Jogo> createState() => _JogoState();
+}
+
+class _JogoState extends State<Jogo> {
+  var _imagemApp = AssetImage("images/padrao.png");
+
+  void _opcaoSelecionada(String escolhsUuario) {
+    var opcoes = ["pedra", "papel", "tesoura"];
+    var numero = Random().nextInt(3);
+    var escolhaApp = opcoes[numero];
+
+    print("Escolha do app: " + escolhaApp);
+    print("Esolcha do usuário: " + escolhsUuario);
   }
 
-  int escolhaComputador = random.nextInt(3) + 1;
-  
-  print('\nVocê escolheu: ${opcoes[escolhaUsuario - 1]}');
-  print('Computador escolheu: ${opcoes[escolhaComputador - 1]}');
-  
-  if (escolhaUsuario == escolhaComputador) {
-    print('Empate!');
-  } else if ((escolhaUsuario == 1 && escolhaComputador == 3) ||
-             (escolhaUsuario == 2 && escolhaComputador == 1) ||
-             (escolhaUsuario == 3 && escolhaComputador == 2)) {
-    print('Você venceu!');
-  } else {
-    print('Computador venceu!');
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        title: const Text('JokenPo'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          //1 - escolha do app
+          Padding(
+            padding: EdgeInsets.only(top: 32, bottom: 16),
+            child: Text(
+              "Escolha do app",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          //2 - Imagem de escolha do app
+          Image(image: _imagemApp),
+
+          //3- Escolha uma opção abaixo
+          Padding(
+            padding: EdgeInsets.only(top: 32, bottom: 16),
+            child: Text(
+              "Escolha uma opção abaixo",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("pedra"),
+                child: const Image(
+                    image: AssetImage('images/papel.png'), height: 100),
+              ),
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("pedra"),
+                child: const Image(
+                    image: AssetImage('images/pedra.png'), height: 100),
+              ),
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("tesoura"),
+                child: const Image(
+                    image: AssetImage('images/tesoura.png'), height: 100),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 ```
